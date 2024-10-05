@@ -1,0 +1,64 @@
+###################### Agent Configuration Example #########################
+
+# This file is an example configuration file highlighting only the most common
+# options. The elastic-agent.reference.yml file from the same directory contains all the
+# supported options with more comments. You can use it as a reference.
+
+######################################
+# Fleet configuration
+######################################
+outputs:
+  default:
+    type: elasticsearch
+    #hosts: [https://elasticsearch01.auladevops:9200]
+    hosts:
+      - 'https://elasticsearch01.auladevops:9200'
+    ssl.verification_mode: "none"
+    #ssl.certificate_authorities: ["/app/ca.crt"]
+
+    #api_key: "sz2xW5IBr7s9U2Ogh2Ff:ta5hWB6lSTa_pT8_ZBKb6w"
+    username: "elastic"
+    password: "PblVwv+IQiVBQTrSE2+t"
+    preset: balanced
+
+
+
+# Here you can configure your list of inputs. You can either configure all the inputs as a list of arrays
+# or create an "inputs.d" directory containing your input configurations.
+# See https://www.elastic.co/guide/en/fleet/current/elastic-agent-configuration.html for how to structure the "inputs.d" directory.
+inputs:
+  # Collecting system metrics
+  - type: system/metrics
+    # Each input must have a unique ID.
+    id: unique-system-metrics-input
+    # Namespace name must conform to the naming conventions for Elasticsearch indices, cannot contain dashes (-), and cannot exceed 100 bytes
+    # For index naming restrictions, see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html#indices-create-api-path-params
+    data_stream.namespace: default
+    use_output: default
+    streams:
+      - metricsets:
+        - cpu
+        # Dataset name must conform to the naming conventions for Elasticsearch indices, cannot contain dashes (-), and cannot exceed 100 bytes
+        data_stream.dataset: system.cpu
+      - metricsets:
+        - memory
+        data_stream.dataset: system.memory
+      - metricsets:
+        - network
+        data_stream.dataset: system.network
+      - metricsets:
+        - filesystem
+        data_stream.dataset: system.filesystem
+
+   # Collecting log files
+  - type: filestream
+    # Input ID allowing Elastic Agent to track the state of this input. Must be unique.
+    id: my-log
+    streams:
+        # Stream ID for this data stream allowing Filebeat to track the state of the ingested files. Must be unique.
+        # Each filestream data stream creates a separate instance of the Filebeat filestream input.
+        - id: your-filestream-stream-id
+          data_stream:
+           dataset: generic
+          paths:
+           - /app/*.log
