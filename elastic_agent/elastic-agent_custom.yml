@@ -12,13 +12,13 @@ outputs:
     type: elasticsearch
     #hosts: [https://elasticsearch01.auladevops:9200]
     hosts:
-      - 'https://elasticsearch01.auladevops:9200'
+      - 'URL_VALUE'
     ssl.verification_mode: "none"
     #ssl.certificate_authorities: ["/app/ca.crt"]
 
-    #api_key: "sz2xW5IBr7s9U2Ogh2Ff:ta5hWB6lSTa_pT8_ZBKb6w"
+    #api_key: "APIKEY"
     username: "elastic"
-    password: "PblVwv+IQiVBQTrSE2+t"
+    password: "PASS_VALUE"
     preset: balanced
 
 
